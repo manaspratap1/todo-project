@@ -1,0 +1,36 @@
+<h3>Edit Task</h3>
+
+<form method="POST" action="/tasks/edit/<%= task.id %>" class="card p-4">
+
+  <input name="title" class="form-control mb-2" value="<%= task.title %>" required />
+
+  <textarea name="description" class="form-control mb-2">
+    <%= task.description %>
+  </textarea>
+
+  <select name="priority" class="form-control mb-2">
+    <option value="low" <%= task.priority==='low'?'selected':'' %>>Low</option>
+    <option value="medium" <%= task.priority==='medium'?'selected':'' %>>Medium</option>
+    <option value="high" <%= task.priority==='high'?'selected':'' %>>High</option>
+  </select>
+
+  <input type="date" name="due_date" class="form-control mb-2" value="<%= task.due_date %>" />
+
+  <select name="project_id" class="form-control mb-2">
+    <% projects.forEach(p => { %>
+      <option value="<%= p.id %>" <%= p.id===task.project_id?'selected':'' %>>
+        <%= p.name %>
+      </option>
+    <% }) %>
+  </select>
+
+  <select name="assigned_to" class="form-control mb-2">
+    <% users.forEach(u => { %>
+      <option value="<%= u.id %>" <%= u.id===task.assigned_to?'selected':'' %>>
+        <%= u.name %>
+      </option>
+    <% }) %>
+  </select>
+
+  <button class="btn btn-primary">Update Task</button>
+</form>

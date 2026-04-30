@@ -1,0 +1,110 @@
+<h3 class="mb-4">Tasks</h3>
+
+<% if (tasks.length === 0) { %>
+  <div class="alert alert-info">No tasks assigned</div>
+<% } %>
+
+<div class="row">
+  <% tasks.forEach(t => { %>
+
+    <div class="col-md-6">
+      <div class="card mb-4 shadow-sm p-3">
+
+        <!-- TITLE -->
+        <h5 class="mb-1"><%= t.title %></h5>
+
+        <!-- DESCRIPTION -->
+        <% if (t.description) { %>
+          <p class="text-muted mb-2"><%= t.description %></p>
+        <% } %>
+
+        <!-- PROJECT -->
+        <% if (t.Project) { %>
+          <div class="mb-1">
+            <small class="text-muted">Project:</small>
+            <strong><%= t.Project.name %></strong>
+          </div>
+        <% } %>
+
+        <!-- ASSIGNEE (admin only clarity) -->
+        <% if (user && user.role === 'admin' && t.assignee) { %>
+          <div class="mb-1">
+            <small class="text-muted">Assigned to:</small>
+            <strong><%= t.assignee.name %></strong>
+          </div>
+        <% } %>
+
+        <!-- DUE DATE -->
+        <% if (t.due_date) { %>
+          <div class="mb-2">
+            <small class="text-muted">Due:</small>
+            <strong>
+              <%= new Date(t.due_date).toLocaleDateString() %>
+            </strong>
+          </div>
+        <% } %>
+
+        <!-- STATUS BADGE -->
+        <div class="mb-2">
+          <% if (t.status === 'done') { %>
+            <span class="badge bg-success">Done</span>
+          <% } else if (t.status === 'in_progress') { %>
+            <span class="badge bg-warning text-dark">In Progress</span>
+          <% } else { %>
+            <span class="badge bg-secondary">Todo</span>
+          <% } %>
+        </div>
+
+        <!-- PRIORITY -->
+        <div class="mb-3">
+          <span class="badge bg-info">Priority: <%= t.priority %></span>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="d-flex flex-wrap gap-2">
+
+          <!-- STATUS UPDATE -->
+          <form method="POST" action="/tasks/update-status/<%= t.id %>">
+            <div class="btn-group">
+
+              <button name="status" value="todo"
+                class="btn btn-sm <%= t.status === 'todo' ? 'btn-secondary' : 'btn-outline-secondary' %>">
+                Todo
+              </button>
+
+              <button name="status" value="in_progress"
+                class="btn btn-sm <%= t.status === 'in_progress' ? 'btn-warning' : 'btn-outline-warning' %>">
+                In Progress
+              </button>
+
+              <button name="status" value="done"
+                class="btn btn-sm <%= t.status === 'done' ? 'btn-success' : 'btn-outline-success' %>">
+                Done
+              </button>
+
+            </div>
+          </form>
+
+          <% if (user && user.role === 'admin') { %>
+
+            <!-- EDIT -->
+            <a href="/tasks/edit/<%= t.id %>" class="btn btn-sm btn-warning">
+              Edit
+            </a>
+
+            <!-- DELETE -->
+            <form method="POST" action="/tasks/delete/<%= t.id %>">
+              <button class="btn btn-sm btn-danger">
+                Delete
+              </button>
+            </form>
+
+          <% } %>
+
+        </div>
+
+      </div>
+    </div>
+
+  <% }) %>
+</div>

@@ -1,0 +1,31 @@
+<h3>Create Task</h3>
+
+<form method="POST" action="/tasks/create">
+
+  <input name="title" class="form-control mb-2" placeholder="Title" required />
+
+  <textarea name="description" class="form-control mb-2" placeholder="Description"></textarea>
+
+  <select name="priority" class="form-control mb-2">
+    <option value="low">Low</option>
+    <option value="medium">Medium</option>
+    <option value="high">High</option>
+  </select>
+
+  <input type="date" name="due_date" class="form-control mb-2" />
+
+  <select name="project_id" class="form-control mb-2">
+    <% projects.forEach(p => { %>
+      <option value="<%= p.id %>"><%= p.name %></option>
+    <% }) %>
+  </select>
+
+  <select name="assigned_to" class="form-control mb-2">
+    <% users.forEach(u => { %>
+      <option value="<%= u.id %>"><%= u.name %></option>
+    <% }) %>
+  </select>
+
+  <button class="btn btn-success">Create</button>
+
+</form>

@@ -1,0 +1,28 @@
+<h3 class="mb-4">Create Project</h3>
+
+<form method="POST" action="/projects/create" class="card p-4 shadow-sm">
+
+  <div class="mb-3">
+    <label class="form-label">Project Name</label>
+    <input 
+      type="text" 
+      name="name" 
+      class="form-control" 
+      placeholder="Enter project name"
+      required
+    />
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <textarea 
+      name="description" 
+      class="form-control" 
+      rows="3"
+      placeholder="Enter project description"
+    ></textarea>
+  </div>
+
+  <button class="btn btn-success">Create Project</button>
+
+</form>
