@@ -40,6 +40,7 @@ app.get('/', (req, res) => {
   res.render('home');
 }); 
 
+app.use(require('./routes/userRoutes'));
 app.use(require('./routes/authRoutes'));
 app.use(require('./routes/dashboardRoutes'));
 app.use(require('./routes/projectRoutes'));

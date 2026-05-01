@@ -1,51 +1,41 @@
-<h3 class="mb-4">Tasks</h3>
+<div class="container py-4">
 
-<% if (tasks.length === 0) { %>
-  <div class="alert alert-info">No tasks assigned</div>
-<% } %>
+  <!-- 🔥 HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-semibold mb-0">Tasks</h3>
 
-<div class="row">
-  <% tasks.forEach(t => { %>
+    <% if (user && user.role === 'admin') { %>
+      <a href="/tasks/create" class="btn btn-primary">
+        + Create Task
+      </a>
+    <% } %>
+  </div>
+
+  <% if (tasks.length === 0) { %>
+    <div class="alert alert-info">No tasks assigned</div>
+  <% } %>
+
+  <div class="row g-4">
+
+    <% tasks.forEach(t => { %>
 
     <div class="col-md-6">
-      <div class="card mb-4 shadow-sm p-3">
+      <div class="card shadow-sm border-0 p-3 h-100">
 
-        <!-- TITLE -->
-        <h5 class="mb-1"><%= t.title %></h5>
+        <!-- 🔥 TOP SECTION -->
+        <div class="d-flex justify-content-between align-items-start mb-2">
 
-        <!-- DESCRIPTION -->
-        <% if (t.description) { %>
-          <p class="text-muted mb-2"><%= t.description %></p>
-        <% } %>
+          <div>
+            <h5 class="mb-1 fw-semibold"><%= t.title %></h5>
 
-        <!-- PROJECT -->
-        <% if (t.Project) { %>
-          <div class="mb-1">
-            <small class="text-muted">Project:</small>
-            <strong><%= t.Project.name %></strong>
+            <% if (t.Project) { %>
+              <small class="text-muted">
+                <%= t.Project.name %>
+              </small>
+            <% } %>
           </div>
-        <% } %>
 
-        <!-- ASSIGNEE (admin only clarity) -->
-        <% if (user && user.role === 'admin' && t.assignee) { %>
-          <div class="mb-1">
-            <small class="text-muted">Assigned to:</small>
-            <strong><%= t.assignee.name %></strong>
-          </div>
-        <% } %>
-
-        <!-- DUE DATE -->
-        <% if (t.due_date) { %>
-          <div class="mb-2">
-            <small class="text-muted">Due:</small>
-            <strong>
-              <%= new Date(t.due_date).toLocaleDateString() %>
-            </strong>
-          </div>
-        <% } %>
-
-        <!-- STATUS BADGE -->
-        <div class="mb-2">
+          <!-- STATUS BADGE -->
           <% if (t.status === 'done') { %>
             <span class="badge bg-success">Done</span>
           <% } else if (t.status === 'in_progress') { %>
@@ -53,32 +43,63 @@
           <% } else { %>
             <span class="badge bg-secondary">Todo</span>
           <% } %>
+
         </div>
 
-        <!-- PRIORITY -->
-        <div class="mb-3">
-          <span class="badge bg-info">Priority: <%= t.priority %></span>
+        <!-- DESCRIPTION -->
+        <% if (t.description) { %>
+          <p class="text-muted small mb-3">
+            <%= t.description %>
+          </p>
+        <% } %>
+
+        <!-- 🔥 META STRIP -->
+        <div class="d-flex flex-wrap gap-2 mb-3">
+
+          <% if (t.due_date) { %>
+            <span class="badge bg-light text-dark border">
+              📅 <%= new Date(t.due_date).toLocaleDateString() %>
+            </span>
+          <% } %>
+
+          <!-- PRIORITY BADGE (FIXED) -->
+          <% if (t.priority === 'high') { %>
+            <span class="badge bg-danger">High</span>
+          <% } else if (t.priority === 'medium') { %>
+            <span class="badge bg-warning text-dark">Medium</span>
+          <% } else { %>
+            <span class="badge bg-secondary">Low</span>
+          <% } %>
+
+          <% if (user && user.role === 'admin' && t.assignee) { %>
+            <span class="badge bg-light text-dark border">
+              👤 <%= t.assignee.name %>
+            </span>
+          <% } %>
+
         </div>
 
-        <!-- ACTIONS -->
-        <div class="d-flex flex-wrap gap-2">
+        <hr class="my-2">
 
-          <!-- STATUS UPDATE -->
+        <!-- 🔥 ACTIONS -->
+        <div class="d-flex justify-content-between align-items-center mt-auto">
+
+          <!-- STATUS BUTTONS -->
           <form method="POST" action="/tasks/update-status/<%= t.id %>">
-            <div class="btn-group">
+            <div class="btn-group btn-group-sm">
 
               <button name="status" value="todo"
-                class="btn btn-sm <%= t.status === 'todo' ? 'btn-secondary' : 'btn-outline-secondary' %>">
+                class="btn <%= t.status === 'todo' ? 'btn-secondary' : 'btn-outline-secondary' %>">
                 Todo
               </button>
 
               <button name="status" value="in_progress"
-                class="btn btn-sm <%= t.status === 'in_progress' ? 'btn-warning' : 'btn-outline-warning' %>">
-                In Progress
+                class="btn <%= t.status === 'in_progress' ? 'btn-warning' : 'btn-outline-warning' %>">
+                Progress
               </button>
 
               <button name="status" value="done"
-                class="btn btn-sm <%= t.status === 'done' ? 'btn-success' : 'btn-outline-success' %>">
+                class="btn <%= t.status === 'done' ? 'btn-success' : 'btn-outline-success' %>">
                 Done
               </button>
 
@@ -87,17 +108,19 @@
 
           <% if (user && user.role === 'admin') { %>
 
-            <!-- EDIT -->
-            <a href="/tasks/edit/<%= t.id %>" class="btn btn-sm btn-warning">
-              Edit
-            </a>
+            <div class="d-flex gap-2">
 
-            <!-- DELETE -->
-            <form method="POST" action="/tasks/delete/<%= t.id %>">
-              <button class="btn btn-sm btn-danger">
-                Delete
-              </button>
-            </form>
+              <a href="/tasks/edit/<%= t.id %>" class="btn btn-sm btn-outline-warning">
+                Edit
+              </a>
+
+              <form method="POST" action="/tasks/delete/<%= t.id %>">
+                <button class="btn btn-sm btn-outline-danger">
+                  Delete
+                </button>
+              </form>
+
+            </div>
 
           <% } %>
 
@@ -106,5 +129,8 @@
       </div>
     </div>
 
-  <% }) %>
+    <% }) %>
+
+  </div>
+
 </div>

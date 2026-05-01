@@ -1,63 +1,82 @@
-<h3 class="mb-4">Dashboard</h3>
+<div class="container py-4">
 
-<% if (user && user.role === 'admin') { %>
+  <h3 class="mb-4 fw-semibold">Dashboard</h3>
 
-  <!-- STATS -->
-  <div class="row mb-4">
+  <% if (user && user.role === 'admin') { %>
+
+  <!-- 🔥 STATS (UPGRADED) -->
+  <div class="row g-3 mb-4">
+
     <div class="col-md-3">
-      <div class="card p-3 text-center">
-        <h6>Total</h6>
-        <h3><%= stats.total %></h3>
+      <div class="card shadow-sm p-3">
+        <small class="text-muted">Total Tasks</small>
+        <h2 class="mt-1 fw-bold"><%= stats.total %></h2>
       </div>
     </div>
 
     <div class="col-md-3">
-      <div class="card p-3 text-center text-success">
-        <h6>Completed</h6>
-        <h3><%= stats.completed %></h3>
+      <div class="card shadow-sm p-3 border-start border-success border-3">
+        <small class="text-muted">Completed</small>
+        <h2 class="mt-1 fw-bold text-success"><%= stats.completed %></h2>
       </div>
     </div>
 
     <div class="col-md-3">
-      <div class="card p-3 text-center text-warning">
-        <h6>Pending</h6>
-        <h3><%= stats.pending %></h3>
+      <div class="card shadow-sm p-3 border-start border-warning border-3">
+        <small class="text-muted">Pending</small>
+        <h2 class="mt-1 fw-bold text-warning"><%= stats.pending %></h2>
       </div>
     </div>
 
     <div class="col-md-3">
-      <div class="card p-3 text-center text-danger">
-        <h6>Overdue</h6>
-        <h3><%= stats.overdue %></h3>
+      <div class="card shadow-sm p-3 border-start border-danger border-3">
+        <small class="text-muted">Overdue</small>
+        <h2 class="mt-1 fw-bold text-danger"><%= stats.overdue %></h2>
       </div>
     </div>
+
   </div>
 
-  <!-- CHARTS GRID -->
-  <div class="row">
+
+  <!-- 🔥 CHART SECTION -->
+  <div class="row g-4">
 
     <!-- PROJECT CHART -->
     <div class="col-md-6">
-      <div class="card p-3 shadow-sm">
-        <h6 class="mb-2">Tasks per Project</h6>
-        <canvas id="projectChart" style="max-height:300px;"></canvas>
+      <div class="card shadow-sm p-3 h-100">
+        <h6 class="fw-semibold mb-1">Tasks per Project</h6>
+        <p class="text-muted small mb-2">
+          Shows workload distribution across projects
+        </p>
+
+        <div style="height: 280px;">
+          <canvas id="projectChart"></canvas>
+        </div>
       </div>
     </div>
 
     <!-- STATUS CHART -->
     <div class="col-md-6">
-      <div class="card p-3 shadow-sm">
-        <h6 class="mb-2">Status Breakdown</h6>
-        <canvas id="statusChart" style="max-height:300px;"></canvas>
+      <div class="card shadow-sm p-3 h-100">
+        <h6 class="fw-semibold mb-1">Task Status Breakdown</h6>
+        <p class="text-muted small mb-2">
+          Completion vs progress vs pending tasks
+        </p>
+
+        <div style="height: 280px;">
+          <canvas id="statusChart"></canvas>
+        </div>
       </div>
     </div>
 
   </div>
 
+
+  <!-- 🔥 CHART JS -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
-    // PROJECT DATA
+    // ---------- PROJECT CHART ----------
     const rawData = <%- JSON.stringify(stats.tasksPerProject || []) %>;
 
     const labels = rawData.map(t => t.Project ? t.Project.name : 'Unknown');
@@ -71,20 +90,28 @@
           datasets: [{
             label: 'Tasks',
             data: data,
-            backgroundColor: '#0d6efd'  // Bootstrap primary blue
+            backgroundColor: '#0d6efd',
+            borderRadius: 6
           }]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
           scales: {
-            y: { beginAtZero: true }
+            y: {
+              beginAtZero: true,
+              ticks: { stepSize: 1 }
+            }
           }
         }
       });
     }
 
-    // STATUS DATA
+
+    // ---------- STATUS CHART ----------
     const statusData = <%- JSON.stringify(stats.statusBreakdown || []) %>;
 
     const statusLabels = statusData.map(s => s.status);
@@ -92,47 +119,61 @@
 
     if (statusLabels.length > 0) {
       new Chart(document.getElementById('statusChart'), {
-        type: 'pie',
+        type: 'doughnut',
         data: {
           labels: statusLabels,
           datasets: [{
             data: statusCounts,
             backgroundColor: [
-              '#6c757d', // todo - gray
-              '#ffc107', // in_progress - yellow
-              '#198754'  // done - green
-            ]
+              '#6c757d',   // todo
+              '#ffc107',   // in progress
+              '#198754'    // done
+            ],
+            borderWidth: 0
           }]
         },
         options: {
           responsive: true,
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
+          cutout: '65%',
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
         }
       });
     }
+
   </script>
 
-<% } else if (user && user.role === 'member') { %>
 
-  <!-- MEMBER DASHBOARD -->
-  <div class="row mb-4">
+  <% } else if (user && user.role === 'member') { %>
+
+  <!-- 🔥 MEMBER DASHBOARD -->
+  <div class="row g-3 mb-4">
+
     <div class="col-md-4">
-      <div class="card p-3 text-center text-success">
-        Completed: <%= completed %>
+      <div class="card shadow-sm p-3 text-center">
+        <small class="text-muted">Completed</small>
+        <h3 class="text-success"><%= completed %></h3>
       </div>
     </div>
 
     <div class="col-md-4">
-      <div class="card p-3 text-center text-warning">
-        Pending: <%= pending %>
+      <div class="card shadow-sm p-3 text-center">
+        <small class="text-muted">Pending</small>
+        <h3 class="text-warning"><%= pending %></h3>
       </div>
     </div>
 
     <div class="col-md-4">
-      <div class="card p-3 text-center text-danger">
-        Overdue: <%= overdue %>
+      <div class="card shadow-sm p-3 text-center">
+        <small class="text-muted">Overdue</small>
+        <h3 class="text-danger"><%= overdue %></h3>
       </div>
     </div>
+
   </div>
 
   <% if (tasks.length === 0) { %>
@@ -140,9 +181,12 @@
   <% } %>
 
   <% tasks.forEach(t => { %>
-    <div class="card mb-2 p-2">
-      <strong><%= t.title %></strong> - <%= t.status %>
+    <div class="card shadow-sm p-3 mb-2">
+      <strong><%= t.title %></strong>
+      <small class="text-muted"> - <%= t.status %></small>
     </div>
   <% }) %>
 
-<% } %>
+  <% } %>
+
+</div>

@@ -1,36 +1,109 @@
-<h3>Edit Task</h3>
+<div class="container py-4">
 
-<form method="POST" action="/tasks/edit/<%= task.id %>" class="card p-4">
+  <!-- 🔥 HEADER -->
+  <div class="mb-4">
+    <h3 class="fw-semibold mb-1">Edit Task</h3>
+    <p class="text-muted small mb-0">
+      Update task details, assignment, or priority
+    </p>
+  </div>
 
-  <input name="title" class="form-control mb-2" value="<%= task.title %>" required />
+  <!-- 🔥 FORM CARD -->
+  <div class="card shadow-sm border-0 p-4" style="max-width:700px;">
 
-  <textarea name="description" class="form-control mb-2">
-    <%= task.description %>
-  </textarea>
+    <!-- ERROR -->
+    <% if (typeof error !== 'undefined') { %>
+      <div class="alert alert-danger">
+        <%= error %>
+      </div>
+    <% } %>
 
-  <select name="priority" class="form-control mb-2">
-    <option value="low" <%= task.priority==='low'?'selected':'' %>>Low</option>
-    <option value="medium" <%= task.priority==='medium'?'selected':'' %>>Medium</option>
-    <option value="high" <%= task.priority==='high'?'selected':'' %>>High</option>
-  </select>
+    <form method="POST" action="/tasks/edit/<%= task.id %>">
 
-  <input type="date" name="due_date" class="form-control mb-2" value="<%= task.due_date %>" />
+      <!-- TITLE -->
+      <div class="mb-3">
+        <label class="form-label small fw-semibold">Task Title</label>
+        <input 
+          name="title" 
+          class="form-control form-control-lg" 
+          value="<%= task.title %>" 
+          required 
+        />
+      </div>
 
-  <select name="project_id" class="form-control mb-2">
-    <% projects.forEach(p => { %>
-      <option value="<%= p.id %>" <%= p.id===task.project_id?'selected':'' %>>
-        <%= p.name %>
-      </option>
-    <% }) %>
-  </select>
+      <!-- DESCRIPTION (FIXED) -->
+      <div class="mb-3">
+        <label class="form-label small fw-semibold">Description</label>
+        <textarea 
+          name="description" 
+          class="form-control" 
+          rows="3"
+        ><%= task.description || '' %></textarea>
+      </div>
 
-  <select name="assigned_to" class="form-control mb-2">
-    <% users.forEach(u => { %>
-      <option value="<%= u.id %>" <%= u.id===task.assigned_to?'selected':'' %>>
-        <%= u.name %>
-      </option>
-    <% }) %>
-  </select>
+      <!-- PRIORITY + DATE -->
+      <div class="row mb-3">
 
-  <button class="btn btn-primary">Update Task</button>
-</form>
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">Priority</label>
+          <select name="priority" class="form-select">
+            <option value="low" <%= task.priority==='low'?'selected':'' %>>Low</option>
+            <option value="medium" <%= task.priority==='medium'?'selected':'' %>>Medium</option>
+            <option value="high" <%= task.priority==='high'?'selected':'' %>>High</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">Due Date</label>
+          <input 
+            type="date" 
+            name="due_date" 
+            class="form-control" 
+            value="<%= task.due_date ? task.due_date.toISOString().split('T')[0] : '' %>" 
+          />
+        </div>
+
+      </div>
+
+      <!-- PROJECT -->
+      <div class="mb-3">
+        <label class="form-label small fw-semibold">Project</label>
+        <select name="project_id" class="form-select">
+          <% projects.forEach(p => { %>
+            <option value="<%= p.id %>" <%= p.id===task.project_id?'selected':'' %>>
+              <%= p.name %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <!-- ASSIGNEE -->
+      <div class="mb-4">
+        <label class="form-label small fw-semibold">Assign To</label>
+        <select name="assigned_to" class="form-select">
+          <% users.forEach(u => { %>
+            <option value="<%= u.id %>" <%= u.id===task.assigned_to?'selected':'' %>>
+              <%= u.name %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <!-- 🔥 ACTIONS -->
+      <div class="d-flex justify-content-between">
+
+        <a href="/tasks" class="btn btn-outline-secondary">
+          Cancel
+        </a>
+
+        <button class="btn btn-primary px-4">
+          Update Task
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

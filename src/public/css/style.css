@@ -1,0 +1,65 @@
+/* ===== GLOBAL SPACING ===== */
+/* ===== GLOBAL BASE ===== */
+body.app-layout {
+  background-color: #f5f7fb;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* ===== CARDS ===== */
+.card {
+  border: none;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+/* ===== HEADINGS ===== */
+h3 {
+  font-weight: 600;
+}
+
+h5, h6 {
+  font-weight: 500;
+}
+
+/* ===== BADGES ===== */
+.badge {
+  font-size: 0.75rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  border-radius: 8px;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  padding: 0.75rem 1.5rem;
+}
+
+.navbar-brand {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+/* ===== TABLE ===== */
+.table {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* ===== FORM ===== */
+.form-control, .form-select {
+  border-radius: 8px;
+}
+
+/* ===== ALERT ===== */
+.alert {
+  border-radius: 10px;
+}

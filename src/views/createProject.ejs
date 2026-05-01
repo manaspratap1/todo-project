@@ -1,28 +1,63 @@
-<h3 class="mb-4">Create Project</h3>
+<div class="container py-4">
 
-<form method="POST" action="/projects/create" class="card p-4 shadow-sm">
-
-  <div class="mb-3">
-    <label class="form-label">Project Name</label>
-    <input 
-      type="text" 
-      name="name" 
-      class="form-control" 
-      placeholder="Enter project name"
-      required
-    />
+  <!-- 🔥 HEADER -->
+  <div class="mb-4">
+    <h3 class="fw-semibold mb-1">Create Project</h3>
+    <p class="text-muted small mb-0">
+      Add a new project to organize tasks and team work
+    </p>
   </div>
 
-  <div class="mb-3">
-    <label class="form-label">Description</label>
-    <textarea 
-      name="description" 
-      class="form-control" 
-      rows="3"
-      placeholder="Enter project description"
-    ></textarea>
+  <!-- 🔥 FORM CARD -->
+  <div class="card shadow-sm border-0 p-4" style="max-width:600px;">
+
+    <!-- ERROR -->
+    <% if (typeof error !== 'undefined') { %>
+      <div class="alert alert-danger">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <form method="POST" action="/projects/create">
+
+      <!-- PROJECT NAME -->
+      <div class="mb-3">
+        <label class="form-label small fw-semibold">Project Name</label>
+        <input 
+          type="text" 
+          name="name" 
+          class="form-control form-control-lg" 
+          placeholder="e.g. Website Redesign"
+          required
+        />
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="mb-4">
+        <label class="form-label small fw-semibold">Description</label>
+        <textarea 
+          name="description" 
+          class="form-control" 
+          rows="4"
+          placeholder="Describe the purpose of this project"
+        ></textarea>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="d-flex justify-content-between align-items-center">
+
+        <a href="/projects" class="btn btn-outline-secondary">
+          Cancel
+        </a>
+
+        <button class="btn btn-success px-4">
+          Create Project
+        </button>
+
+      </div>
+
+    </form>
+
   </div>
 
-  <button class="btn btn-success">Create Project</button>
-
-</form>
+</div>
